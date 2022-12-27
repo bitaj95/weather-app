@@ -6,7 +6,6 @@ import { WEATHER_API_URL, WEATHER_API_KEY } from "./api";
 
 function App() {
   const handleSearchChange = (searchData) => {
-    console.log(searchData);
     //store location values in corresponding variables
     const [latitude, longitude] = searchData.value.split(" ");
 
@@ -17,9 +16,18 @@ function App() {
     Two fetches, store in variables
     */
 
-    const currentWeather = fetch(
+    const currentWeatherFetch = fetch(
       `${WEATHER_API_URL}/weather?lat=${latitude}&lon=${longitude}&appid=${WEATHER_API_KEY}`
     );
+
+    const forecastFetch = fetch(
+      `${WEATHER_API_URL}/forecast?lat=${latitude}&lon=${longitude}&appid=${WEATHER_API_KEY}`
+    );
+
+    Promise.all([currentWeatherFetch, forecastFetch]).then(async (response) => {
+      const weatherResponse = await response[0].json();
+      const forecastResponse = await response[1].json();
+    });
   };
 
   return (

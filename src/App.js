@@ -1,5 +1,4 @@
 import { useState } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import Search from "./components/search/search";
 import CurrentWeather from "./components/current-weather/current-weather";
@@ -14,19 +13,14 @@ function App() {
     //store location values in corresponding variables
     const [latitude, longitude] = searchData.value.split(" ");
 
-    /*   fetching two API calls.
-    1. current weather
-    2. forecast
-    Promise all to fetch both of these.
-    Two fetches, store in variables
-    */
-
+    /* fetching two API calls: 1. current weather, 2. forecast
+    Promise all to fetch both of these, two fetches, store in variables*/
     const currentWeatherFetch = fetch(
-      `${WEATHER_API_URL}/weather?lat=${latitude}&lon=${longitude}&appid=${WEATHER_API_KEY}`
+      `${WEATHER_API_URL}/weather?lat=${latitude}&lon=${longitude}&appid=${WEATHER_API_KEY}&units=metric`
     );
 
     const forecastFetch = fetch(
-      `${WEATHER_API_URL}/forecast?lat=${latitude}&lon=${longitude}&appid=${WEATHER_API_KEY}`
+      `${WEATHER_API_URL}/forecast?lat=${latitude}&lon=${longitude}&appid=${WEATHER_API_KEY}&units=metric`
     );
 
     Promise.all([currentWeatherFetch, forecastFetch])
@@ -45,7 +39,7 @@ function App() {
   return (
     <div className="container">
       <Search onSearchChange={handleSearchChange} />
-      <CurrentWeather />
+      {currentWeather && <CurrentWeather data={currentWeather} />}
     </div>
   );
 }
